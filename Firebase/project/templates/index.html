@@ -1,0 +1,166 @@
+<html style="scroll-behavior: smooth;">
+<head>
+  <meta charset="utf-8">
+  <title>Project</title>
+  <!-- Latest compiled and minified CSS -->
+  <title>Bootstrap Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="/static/chartmanage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebase/init.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#config-web-app -->
+
+    <script>
+      // Your web app's Firebase configuration
+      var rollnos=[];
+      var pres=0;
+      var firebaseConfig = {
+        apiKey: "AIzaSyBdQ_7ux55To6y93K4shNsiV6HB7czxClU",
+        authDomain: "mark-me-cebf5.firebaseapp.com",
+        databaseURL: "https://mark-me-cebf5.firebaseio.com",
+        projectId: "mark-me-cebf5",
+        storageBucket: "mark-me-cebf5.appspot.com",
+        messagingSenderId: "197071396388",
+        appId: "1:197071396388:web:8437dc90597fd640"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      console.log(firebase.app().name);  // "[DEFAULT]"
+
+      var db = firebase.firestore();
+        db.collection("Attendance").doc("CSE A").collection("09-Jul-2019").get().then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            var tab=document.getElementById("stud_det");
+            pres++;
+            var row=tab.insertRow(1);
+            var rn=row.insertCell(0);
+            var tm=row.insertCell(1);
+            rn.innerHTML=doc.data().ROLL;
+            tm.innerHTML=doc.data().UID;
+            rollnos.push(doc.data().ROLL);
+              console.log(doc.data().ROLL);
+          });
+          document.getElementById("pres_no").innerHTML=pres;
+          console.log("dd"+rollnos);
+          var storage = firebase.storage();
+          var pathref=storage.ref("images/test_1.jpg")
+
+      });
+    </script>
+
+
+
+</head>
+<body>
+  <nav class="navbar navbar-expand-md bg-white navbar-light shadow ">
+    <a class="navbar-brand" href="#">Mark ME!</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsenav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="collapsenav">
+
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item ml-1">
+        <a class="nav-link font-weight-light" href="#">HOME</a>
+        </li>
+        <li class="nav-item ml-1 font-weight-light">
+          <a class="nav-link" href="#manage">MANAGE</a>
+          </li>
+  </ul>
+  </div>
+  </nav>
+  <div class="col-md-12 h-100">
+    <div class="row h-100">
+  <div class="navbar d-none d-lg-block col-md-6 sticky-top" style="width:auto ;height:100%;background:url('/static/bg_curve.png');background-repeat:no-repeat;background-size:contain">
+    <h2 id="cur_time" class=" ml-4 pt-5" style="color:white; font-family:'Ubuntu','Roboto',sans-serif" >9:42pm</h2>
+    <h4 id="cur_date" class="ml-4" style="color:white;">3rd July,2019</h4>
+    <h5 class="ml-4" style="color:white; margin-top:12%;">SELECTED DATE</h5>
+    <span id="sel_date" class="ml-4" style="color:white;display:block;">7th June,2019</span>
+
+    <span class="ml-4 mb-5" data-toggle="modal" data-target="#myModal" style="color:white;font-weight:lighter;display:block;"><a href="#" style="text-decoration:none; color:white;">choose another date</a></span>
+
+
+
+    <span class="ml-4 " style="color:white;letter-spacing:2px;"> TOTAL</span>
+    <span class="ml-4 " style="color:white;letter-spacing:2px;"> PRESENT</span>
+    <br>
+    <h2 class="ml-4 display-4" style="color:white;display:inline;">15</h2>
+    <h2 id="pres_no" class="ml-4 display-4" style="color:white;display:inline;">15</h2>
+
+    <span class="font-weight-light ml-4" style="color:white;display:block;position:absolute;bottom:12%;">Currently viewing for</span>
+    <h1 class=" display-4 ml-3" style="color:white;position:absolute;bottom:2%;">CSE-A</h1>
+    <span class="ml-5" style="color:white;position:absolute; bottom:4%;"><small> Not CSE- A?</small></span>
+    </div>
+
+
+    <div class="container ml-auto mt-4 col-md-6 h-100">
+        <h1 class="d-inline display-4 mx-auto">Attendance Summary</h1>
+        <div class=" d-block ml-lg-n4 align-self-center mt-5" id="chartContainer" style="height: 60%; width: 70%;"></div>
+        <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+    </div>
+  </div>
+</div>
+<div id="manage" class="container-fluid text-center pb-5" style="width:100%; height:auto;background-color:#1976d2;margin-top: -10px;">
+  <h1 class="display-4 pt-3" style="color:#FFF;">Students Present</h1>
+
+<table  class="table bg-white rounded table-hover table-borderless mt-4" id="stud_det">
+  <th class="thread-dark">Roll No</th>
+  <th>Time</th>
+</table>
+</div>
+
+
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title float-left">Select a date</h4>
+
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form class="form-inline" action="#">
+          <div class="form-group">
+            <label for="date ml-1"> DATE:</label>
+            <input type="DATE" class="form-control ml-3" id="date_inp" placeholder="Enter date" name="dateInput">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" onclick="change()" data-dismiss="modal" style="background-color:#1976d2;color:white;">Submit</button>
+
+        <button type="button" class="btn btn-default" data-dismiss="modal" style="background-color:#1976d2;color:white;">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="container-fluid">
+
+  <h1 class="display-4 mx-auto text-center my-3">We found these Attendances suspicious</h1>
+  <table  class="table bg-white rounded table-hover table-borderless mt-4" id="stud_det">
+    <th class="thread-dark">Roll No</th>
+    {% for your_list_element in your_list %}
+    <tr>
+        <td>{{ your_list_element }} </td>
+      </tr>
+    {% endfor %}
+  </table>
+
+</div>
+</body>
+</html>
